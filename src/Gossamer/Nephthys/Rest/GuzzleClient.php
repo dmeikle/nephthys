@@ -15,7 +15,7 @@
  * Time: 8:41 PM
  */
 
-namespace Gossamer\Nephthys\Utils;
+namespace Gossamer\Nephthys\Rest;
 
 use GuzzleHttp\Client;
 use Psr\Http\Message\RequestInterface;
