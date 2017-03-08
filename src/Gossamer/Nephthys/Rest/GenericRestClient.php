@@ -15,7 +15,7 @@
  * Time: 11:17 PM
  */
 
-namespace Gossamer\Nephthys\Utils;
+namespace Gossamer\Nephthys\Rest;
 
 
 use Psr\Http\Message\RequestInterface;
