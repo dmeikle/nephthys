@@ -48,7 +48,7 @@ class GenericRestClient extends \RestClient implements RestInterface
 
 
     public function query($requestMethod, $model, $verb, array $params) {
-        $api = new RestClient(array(
+        $api = new \RestClient(array(
             'base_url' => $this->credentials['baseUrl'],
             'format' => $this->credentials['format'],
             'headers' => $this->buildHeaders()
