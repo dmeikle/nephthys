@@ -49,14 +49,13 @@ class GenericRestClient extends \RestClient implements RestInterface
 
 
     public function query($requestMethod, $model, $verb, array $params) {
-        $api = new \RestClient(array(
+        $api = new GenericRestExtension(array(
             'base_url' => $this->credentials['baseUrl'],
             'format' => $this->credentials['format'],
             'headers' => $this->buildHeaders()
         ));
-      //  $api->setLogger($this->logger);
+      
 
-        //$result = $api->$queryType($entity->getComponentName() . '/' . $entity->getTablename() . "/$verb/", $params);
         $result = $api->$requestMethod($model->getTablename() . "/$verb/", $params);
         // pr($result);
 
@@ -74,8 +73,7 @@ class GenericRestClient extends \RestClient implements RestInterface
             if (isset($decodedResult->AuthorizationToken)) {
                 $_SESSION['AuthorizationToken'] = $decodedResult->AuthorizationToken;
             }
-//echo "returning \r\n";
-//            print_r($decodedResult);
+
             return($decodedResult);
         } elseif ($result->info->http_code == 500) {
 
