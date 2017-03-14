@@ -19,6 +19,7 @@ namespace Gossamer\Nephthys\Rest;
 
 
 use Psr\Http\Message\RequestInterface;
+use Gossamer\Nephthys\Rest\RestInterface;
 
 class GenericRestClient extends \RestClient implements RestInterface
 {
