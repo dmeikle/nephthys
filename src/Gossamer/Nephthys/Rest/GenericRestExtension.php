@@ -21,6 +21,7 @@ namespace Gossamer\Nephthys\Rest;
 class GenericRestExtension extends \RestClient
 {
     public function execute($url, $method='GET', $parameters=[], $headers=[]){
+
         $client = clone $this;
         $client->url = $url;
         $client->handle = curl_init();
@@ -43,6 +44,7 @@ class GenericRestExtension extends \RestClient
                 }
             }
         }
+
 //new update from base RestClient - breaks urls not expecting '.json' in the url request
 //        if($client->options['format'])
 //            $client->url .= '.'.$client->options['format'];
@@ -88,12 +90,41 @@ class GenericRestExtension extends \RestClient
             }
         }
         curl_setopt_array($client->handle, $curlopt);
-        pr($client->handle);
+
         $client->parse_response(curl_exec($client->handle));
         $client->info = (object) curl_getinfo($client->handle);
         $client->error = curl_error($client->handle);
 
         curl_close($client->handle);
         return $client;
+    }
+
+    public function format_query($parameters, $primary='=', $secondary='&'){
+        $query = "";
+        foreach($parameters as $key => $values){
+            foreach(is_array($values)? $values : [$values] as $value){
+                $pair = [($key), urlencode($value)];
+                $query .= implode($primary, $pair) . $secondary;
+            }
+        }
+        return rtrim($query, $secondary);
+    }
+
+    public function decode_response(){
+        if(empty($this->decoded_response)){
+            $format = $this->get_response_format();
+            if(!array_key_exists($format, $this->options['decoders']))
+                throw new RestClientException("'${format}' is not a supported ".
+                    "format, register a decoder to handle this response.");
+            if($format == 'json') {
+                $this->decoded_response = json_decode($this->response, true);
+            } else{
+                $this->decoded_response = call_user_func(
+                    $this->options['decoders'][$format], $this->response);
+            }
+
+        }
+
+        return $this->decoded_response;
     }
 }
